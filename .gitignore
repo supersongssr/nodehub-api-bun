@@ -1,3 +1,53 @@
-
 .links/
 .env
+
+# Dependencies
+node_modules/
+bun.lockb
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+config/.env
+*.env
+.env.*
+
+# Database
+data/
+*.db
+*.db-shm
+*.db-wal
+drizzle/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Coverage
+coverage/
+.nyc_output/
+
+# AI configs (keep structure but ignore generated files)
+AI/updates/*.yaml
+!AI/updates/.gitkeep
