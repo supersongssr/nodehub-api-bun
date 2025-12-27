@@ -1,0 +1,50 @@
+{
+  "name": "nodehub-api",
+  "version": "1.0.0",
+  "description": "Centralized node management service for VPS nodes and frontend panels",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "start": "bun src/index.ts",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint src/",
+    "format": "prettier --write .",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio"
+  },
+  "keywords": [
+    "node-management",
+    "vps",
+    "proxy",
+    "xray",
+    "nginx",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@elysiajs/swagger": "^1.0.5",
+    "elysia": "^1.0.27",
+    "drizzle-orm": "^0.29.4",
+    "p-queue": "^8.0.1",
+    "better-sqlite3": "^9.2.2",
+    "toml": "^0.2.0",
+    "axios": "^1.6.5"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.0.0",
+    "@types/better-sqlite3": "^7.6.8",
+    "drizzle-kit": "^0.20.14",
+    "typescript": "^5.3.3",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

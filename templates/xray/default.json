@@ -1,0 +1,24 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "port": {{PORT}},
+      "protocol": "{{PROXY_TYPE}}",
+      "settings": {
+        "clients": [],
+        "decryption": "chacha20-ietf-poly1305"
+      },
+      "streamSettings": {
+        "network": "tcp"
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "freedom",
+      "settings": {}
+    }
+  ]
+}

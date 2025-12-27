@@ -1,0 +1,26 @@
+# NodeHub API Main Configuration
+# This file contains system-wide settings
+
+[server]
+# Server port
+port = 3000
+# Server host (0.0.0.0 for all interfaces)
+host = "0.0.0.0"
+
+[database]
+# Database path (relative to project root or absolute)
+path = "./data/nodehub.db"
+
+[defaults]
+# Default domain for new nodes (optional)
+default_domain = ""
+# DNS check interval in seconds
+dns_check_interval = 300
+
+[security]
+# API key for external access (optional, leave empty to disable)
+api_key = ""
+
+[logging]
+# Log level: debug, info, warn, error
+level = "info"

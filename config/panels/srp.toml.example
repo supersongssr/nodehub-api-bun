@@ -1,0 +1,17 @@
+# SRP (ShadowsocksR Panel) Configuration Example
+
+[panel]
+type = "Srp"
+url = "https://your-srp-panel.com"
+api_key = "your-srp-api-key"
+
+[node]
+# Default settings for nodes from this panel
+default_rate_limit = "100M"
+enable_traffic_usage = true
+
+[advanced]
+# Sync interval in seconds
+sync_interval = 300
+# Timeout for API requests
+timeout = 30

@@ -1,0 +1,34 @@
+[Unit]
+Description=NodeHub API Service
+Documentation=https://github.com/yourusername/nodehub-api
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=nodehub
+Group=nodehub
+WorkingDirectory=/opt/nodehub-api
+ExecStart=/usr/bin/bun run start
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/nodehub-api/data
+
+# Environment
+Environment="NODE_ENV=production"
+Environment="PORT=3000"
+
+[Install]
+WantedBy=multi-user.target

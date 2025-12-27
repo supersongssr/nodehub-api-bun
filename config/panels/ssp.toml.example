@@ -1,0 +1,17 @@
+# SSP (Shadowsocks Panel) Configuration Example
+
+[panel]
+type = "ssp"
+url = "https://your-ssp-panel.com"
+api_key = "your-ssp-api-key"
+
+[node]
+# Default settings for nodes from this panel
+default_rate_limit = "100M"
+enable_traffic_usage = true
+
+[advanced]
+# Sync interval in seconds
+sync_interval = 300
+# Timeout for API requests
+timeout = 30
