@@ -10,6 +10,9 @@ import { createDnsProvider } from './providers';
 import type { DnsProviderConfig } from './providers';
 import type { DnsUpdateRequest, DnsCheckRequest } from './model';
 
+// Export config functions
+export * from './config';
+
 const logger = createLogger('DnsService');
 
 // Default provider instance (will be initialized with config)

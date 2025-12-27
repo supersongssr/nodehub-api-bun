@@ -1,5 +1,7 @@
 # NodeHub API Main Configuration
-# This file contains system-wide settings
+# This file contains all configuration settings
+# Values with $ENV_VAR format are loaded from environment variables (.env file or system env)
+# The .env file (at project root) contains sensitive data and is NOT committed to git
 
 [server]
 # Server port
@@ -11,16 +13,51 @@ host = "0.0.0.0"
 # Database path (relative to project root or absolute)
 path = "./data/nodehub.db"
 
+[security]
+# API key for external access (loaded from .env)
+api_key = "$API_KEY"
+
 [defaults]
 # Default domain for new nodes (optional)
 default_domain = ""
 # DNS check interval in seconds
 dns_check_interval = 300
 
-[security]
-# API key for external access (optional, leave empty to disable)
-api_key = ""
-
 [logging]
 # Log level: debug, info, warn, error
 level = "info"
+
+[panels]
+# Panel configurations
+# URLs and API keys are loaded from .env file
+
+# SSP (Shadowsocks Panel)
+ssp_enabled = true
+ssp_url = "$SSP_URL"
+ssp_api_key = "$SSP_API_KEY"
+
+# SRP (ShadowsocksR Panel)
+srp_enabled = true
+srp_url = "$SRP_URL"
+srp_api_key = "$SRP_API_KEY"
+
+[dns]
+# DNS provider configuration (loaded from .env)
+provider = "$DNS_PROVIDER"
+zone_id = "$CLOUDFLARE_ZONE_ID"
+# Cloudflare API token (loaded from .env)
+cloudflare_api_token = "$CLOUDFLARE_API_TOKEN"
+
+[notifications]
+# Notification settings
+# Telegram credentials are loaded from .env file
+notify_on_node_offline = true
+notify_on_low_disk = true
+# Disk usage threshold percentage (0-100)
+disk_threshold = 90
+# Telegram bot token (loaded from .env)
+telegram_bot_token = "$TELEGRAM_BOT_TOKEN"
+telegram_chat_id = "$TELEGRAM_CHAT_ID"
+
+
+

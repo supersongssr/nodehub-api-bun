@@ -1,0 +1,47 @@
+when: "2025-12-27T15:53:42+08:00"
+where:
+  - drizzle.config.ts
+  - package.json
+  - scripts/migrate-db.ts
+  - scripts/init-db.ts
+  - scripts/push-db.ts
+  - QUICKSTART.md
+
+why: |
+  数据库初始化失败：
+  - drizzle-kit push 命令不支持 SQLite（需要 better-sqlite3）
+  - 项目使用 bun:sqlite（无需编译的内置模块）
+  - drizzle-kit 版本过旧（0.20.14）不支持 SQLite
+
+how: |
+  1. 更新依赖版本：
+     - drizzle-orm: ^0.29.4 → ^0.36.0
+     - drizzle-kit: ^0.20.14 → ^0.31.0（最新版本）
+
+  2. 更新 drizzle.config.ts：
+     - driver: 'd1' → dialect: 'sqlite'
+     - 适配新版 drizzle-kit 配置格式
+
+  3. 创建自定义迁移脚本：
+     - scripts/migrate-db.ts：使用 bun:sqlite 执行迁移
+     - scripts/init-db.ts：数据库初始化脚本
+     - scripts/push-db.ts：开发用数据库推送脚本
+
+  4. 更新 package.json 脚本：
+     - db:push = "db:generate && db:migrate"（生成并应用迁移）
+     - db:migrate 使用自定义脚本（scripts/migrate-db.ts）
+     - db:reset = "rm -f data/nodehub.db && db:migrate"
+
+  5. 更新 QUICKSTART.md：
+     - 添加分步说明（db:generate + db:migrate）
+     - 更新故障排除部分
+
+must:
+  - ✓ drizzle-orm 和 drizzle-kit 版本兼容
+  - ✓ db:generate 成功生成迁移文件
+  - ✓ db:migrate 使用 bun:sqlite 执行迁移
+  - ✓ db:push 命令正常工作
+  - ✓ 数据库表正确创建（hosts, nodes, configs, dns_records）
+  - ✓ 迁移追踪表 __drizzle_migrations 创建成功
+  - ✓ db:reset 命令可用
+  - ✓ QUICKSTART.md 更新

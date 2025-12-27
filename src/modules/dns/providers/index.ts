@@ -16,11 +16,16 @@ export interface DnsProviderConfig {
 export function createDnsProvider(config: DnsProviderConfig): DnsProvider {
   switch (config.provider) {
     case 'cloudflare':
+      if (!config.apiKey) {
+        throw new Error('Cloudflare requires CLOUDFLARE_API_TOKEN to be set');
+      }
       return new CloudflareProvider(config.apiKey, config.zoneId);
 
-    // TODO: Add more providers
-    // case 'godaddy':
-    //   return new GoDaddyProvider(config.apiKey, config.apiSecret);
+    case 'godaddy':
+      throw new Error('GoDaddy provider not yet implemented. Please use Cloudflare or implement the provider.');
+
+    case 'namecheap':
+      throw new Error('Namecheap provider not yet implemented. Please use Cloudflare or implement the provider.');
 
     default:
       throw new Error(`Unsupported DNS provider: ${config.provider}`);
@@ -28,3 +33,4 @@ export function createDnsProvider(config: DnsProviderConfig): DnsProvider {
 }
 
 export * from './cloudflare';
+

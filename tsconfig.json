@@ -5,10 +5,6 @@
     "lib": ["ES2022"],
     "moduleResolution": "bundler",
     "types": ["bun-types"],
-    "jsx": "react",
-    "jsxFactory": "React.createElement",
-    "jsxFragmentFactory": "React.Fragment",
-    "jsxImportSource": "react",
 
     "strict": true,
     "esModuleInterop": true,

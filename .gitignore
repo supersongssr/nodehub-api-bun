@@ -10,9 +10,7 @@ dist/
 build/
 
 # Environment files
-config/.env
-*.env
-.env.*
+.env
 
 # Database
 data/
@@ -47,7 +45,3 @@ temp/
 # Coverage
 coverage/
 .nyc_output/
-
-# AI configs (keep structure but ignore generated files)
-AI/updates/*.yaml
-!AI/updates/.gitkeep

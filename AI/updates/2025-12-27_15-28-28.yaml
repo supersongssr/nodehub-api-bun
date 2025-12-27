@@ -1,0 +1,66 @@
+when: "2025-12-27T15:28:28+08:00"
+where:
+  - config/config.toml
+  - .env
+  - .env.example
+  - src/utils/config.ts
+  - QUICKSTART.md
+
+why: |
+  配置文件组织不合理，敏感数据和非敏感配置混合，且 .env 位置在 config/ 目录。
+  需要明确分离：
+  1. config.toml：非敏感配置（端口、路径、开关、阈值等）
+  2. .env（根目录）：敏感信息（API keys, tokens, URLs）
+  3. .env 位置应与 package.json 同级（Bun 自动加载）
+
+how: |
+  1. 更新 config/config.toml：
+     - 移除所有敏感值（api_key, ssp_url, srp_url 等）
+     - [panels] 段只保留 ssp_enabled, srp_enabled（开关标志）
+     - [dns] 段留空，配置全部从环境变量读取
+     - [notifications] 保留非敏感配置（开关、阈值）
+     - 添加注释说明哪些变量需要从 .env 设置
+
+  2. 创建根目录 .env 文件（移除 config/.env）：
+     - 包含所有敏感信息：
+       * API_KEY（系统 API 密钥）
+       * SSP_URL, SSP_API_KEY（SSP 面板）
+       * SRP_URL, SRP_API_KEY（SRP 面板）
+       * DNS_PROVIDER, CLOUDFLARE_API_TOKEN, CLOUDFLARE_ZONE_ID（DNS）
+       * TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID（Telegram）
+     - 按功能分组，清晰注释
+
+  3. 创建根目录 .env.example：
+     - 提供模板供用户复制
+     - 详细注释每个参数的用途和获取方式
+     - 明确标注哪些是可选的
+
+  4. 更新 src/utils/config.ts：
+     - 移除 SecurityConfig 接口（API_KEY 从环境变量读取）
+     - 简化 PanelsConfig 为启用标志（URL 从环境变量读取）
+     - 添加辅助函数：getEnv(), getEnvNumber(), getEnvBool()
+     - 更新注释说明配置加载来源
+
+  5. 更新 QUICKSTART.md：
+     - 修改 .env 文件路径从 config/.env 到根目录 .env
+     - 添加配置文件说明（.env vs config.toml）
+     - 更新环境变量列表（包含所有必需和可选变量）
+     - 更新 Podman 部署命令，挂载 .env 文件
+     - 更新故障排除部分（端口配置路径）
+
+  6. 清理旧文件：
+     - 删除 config/.env
+     - 删除 config/.env.example
+     - 确保 .gitignore 包含 .env
+
+must:
+  - ✓ .env 位于项目根目录（与 package.json 同级）
+  - ✓ config.toml 只包含非敏感配置
+  - ✓ .env 只包含敏感信息（API keys, tokens, URLs）
+  - ✓ 配置加载测试通过
+  - ✓ TOML 配置正确读取（server, panels, notifications）
+  - ✓ 环境变量正确读取（SSP_URL, API_KEY, TELEGRAM_TOKEN）
+  - ✓ 旧的 config/.env 文件已删除
+  - ✓ .gitignore 包含 .env
+  - ✓ 提供 .env.example 模板
+  - ✓ QUICKSTART.md 更新配置文件路径和说明

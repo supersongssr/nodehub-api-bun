@@ -1,0 +1,46 @@
+when: "2025-12-27T15:19:57+08:00"
+where:
+  - config/config.toml
+  - config/.env
+  - config/.env.example
+  - src/utils/config.ts
+
+why: |
+  配置文件结构混乱，私密参数和非私密参数混合在 .env 中。
+  将非私密参数移到 config.toml 可以：
+  1. 提高安全性：.env 只包含敏感信息（API keys, tokens）
+  2. 便于管理：配置参数集中在 TOML 文件中
+  3. 清晰分离：敏感数据 vs 公开配置
+
+how: |
+  1. 更新 config.toml，新增配置段：
+     - [panels]: ssp_url, srp_url（面板 URL）
+     - [dns]: provider, zone_id（DNS 配置）
+     - [notifications]: notify_on_node_offline, notify_on_low_disk, disk_threshold（通知设置）
+
+  2. 清理 .env，只保留敏感信息：
+     - API_KEY（API 密钥）
+     - SSP_API_KEY, SRP_API_KEY（面板密钥）
+     - CLOUDFLARE_API_TOKEN（DNS API token）
+     - TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID（Telegram）
+     - 移除：PORT, HOST, DATABASE_PATH, SSP_URL, SRP_URL, DNS_PROVIDER,
+             CLOUDFLARE_ZONE_ID, NOTIFY_ON_NODE_OFFLINE, NOTIFY_ON_LOW_DISK,
+             DISK_THRESHOLD, DOMAIN_DNS_CHECK_INTERVAL
+
+  3. 更新 src/utils/config.ts：
+     - 新增 PanelsConfig、DnsConfig、NotificationsConfig 接口
+     - 扩展 AppConfig 接口包含新配置段
+     - 保持向后兼容：若 TOML 加载失败，从环境变量读取
+
+  4. 更新 .env.example，添加清晰的注释说明
+     - 标注哪些参数在 config.toml 中配置
+     - 强调 .env 只用于敏感数据
+
+must:
+  - ✓ .env 只包含敏感信息（API keys, tokens）
+  - ✓ config.toml 包含所有非敏感配置
+  - ✓ 配置加载逻辑支持新的配置结构
+  - ✓ 向后兼容：TOML 失败时从 ENV 读取
+  - ✓ 配置加载测试通过
+  - ✓ 面板 URL 从 TOML 正确加载
+  - ✓ 通知配置从 TOML 正确加载

@@ -16,27 +16,63 @@ bun install
 ### 2. Configure Environment
 
 ```bash
-# Copy environment template
-cp config/.env.example config/.env
+# Copy environment template (contains sensitive data: API keys, tokens)
+cp .env.example .env
 
 # Edit with your configuration
-nano config/.env
+nano .env
 ```
 
-Required environment variables:
-- `DATABASE_PATH` - SQLite database path (default: `./data/nodehub.db`)
-- `PORT` - API server port (default: `3000`)
+**Configuration Files:**
+- `.env` - Sensitive data (API keys, tokens, panel URLs) - NOT committed to git
+- `config/config.toml` - All configuration settings using `$ENV_VAR` placeholders
 
-Optional:
-- `TELEGRAM_BOT_TOKEN` - For notifications
-- `TELEGRAM_CHAT_ID` - Telegram chat ID
-- `DNS_PROVIDER` - DNS provider (cloudflare)
-- `DNS_API_KEY` - DNS provider API key
+**Configuration Syntax:**
+In `config/config.toml`, sensitive values use `$VARIABLE` placeholders:
+```toml
+[security]
+api_key = "$API_KEY"  # Loaded from .env
+
+[panels]
+ssp_url = "$SSP_URL"  # Loaded from .env
+ssp_api_key = "$SSP_API_KEY"  # Loaded from .env
+```
+
+All `$VARIABLE` placeholders are automatically replaced with values from:
+1. `.env` file at project root
+2. System environment variables
+
+**Required Environment Variables (.env):**
+- `API_KEY` - API access key for external requests
+- `SSP_URL` - SSP panel URL (if using SSP)
+- `SSP_API_KEY` - SSP panel API key
+- `SRP_URL` - SRP panel URL (if using SRP)
+- `SRP_API_KEY` - SRP panel API key
+- `DNS_PROVIDER` - DNS provider (cloudflare, godaddy, namecheap)
+- `CLOUDFLARE_API_TOKEN` - Cloudflare API token (get from: https://dash.cloudflare.com/profile/api-tokens)
+
+**Optional Environment Variables (.env):**
+- `CLOUDFLARE_ZONE_ID` - Cloudflare Zone ID (optional, speeds up DNS updates)
+- `TELEGRAM_BOT_TOKEN` - Telegram bot token for notifications
+- `TELEGRAM_CHAT_ID` - Telegram chat ID for notifications
+
+**Non-Sensitive Configuration (config/config.toml):**
+Edit `config/config.toml` to customize:
+- Server port and host
+- Database path
+- DNS check interval
+- Notification thresholds
+- Panel enable/disable flags
 
 ### 3. Initialize Database
 
 ```bash
+# Generate and apply database schema
 bun run db:push
+
+# Or step by step:
+bun run db:generate  # Generate migration files
+bun run db:migrate   # Apply migrations
 ```
 
 ## Development
@@ -79,6 +115,7 @@ podman build -t nodehub-api .
 podman run -d \
   --name nodehub-api \
   -p 3000:3000 \
+  -v $(pwd)/.env:/app/.env \
   -v $(pwd)/config:/app/config \
   -v $(pwd)/templates:/app/templates \
   -v $(pwd)/data:/app/data \
@@ -192,16 +229,20 @@ Templates are stored in `templates/` and can be edited after deployment:
 ### Database Migration Issues
 
 ```bash
-# Reset database
-rm -f data/nodehub.db*
+# Reset database (remove and recreate)
+rm -f data/nodehub.db
 bun run db:push
+
+# Or use the reset command
+bun run db:reset
 ```
 
 ### Port Already in Use
 
 ```bash
-# Change port in config/.env
-PORT=3001
+# Change port in config/config.toml
+[server]
+port = 3001
 ```
 
 ### View Logs

@@ -118,7 +118,7 @@ export class SRPAdapter implements PanelAdapter {
       await this.apiRequest(`/api/server/${nodeId}`, 'PUT', updateData);
       return true;
     } catch (error) {
-      logger.error(`Failed to update node ${nodeId} in SRP panel', { error });
+      logger.error(`Failed to update node ${nodeId} in SRP panel`, { error });
       return false;
     }
   }
@@ -143,7 +143,7 @@ export class SRPAdapter implements PanelAdapter {
         isActive: user.enable || user.is_active || true,
       }));
     } catch (error) {
-      logger.error(`Failed to get users for node ${nodeId} from SRP panel', { error });
+      logger.error(`Failed to get users for node ${nodeId} from SRP panel`, { error });
       return [];
     }
   }
@@ -156,7 +156,7 @@ export class SRPAdapter implements PanelAdapter {
       const data = await this.apiRequest(`/api/server/${nodeId}/users/${userId}`);
       return data.data?.u + data.data?.d || data.data?.traffic_used || 0;
     } catch (error) {
-      logger.error(`Failed to get traffic for user ${userId} in node ${nodeId}', { error });
+      logger.error(`Failed to get traffic for user ${userId} in node ${nodeId}`, { error });
       return 0;
     }
   }

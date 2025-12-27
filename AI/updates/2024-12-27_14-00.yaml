@@ -1,0 +1,21 @@
+when: 2024-12-27T14:00:00Z
+where:
+  - src/
+  - config/
+  - templates/
+  - tests/
+why: Complete implementation of NodeHub API project from documentation to working code
+how: Implemented full-stack NodeHub API following the 4-phase roadmap:
+  - Phase 1: Project initialization with Bun, Elysia, Drizzle ORM, SQLite3
+  - Phase 2: Core modules (Host, Node, Config) with routes, services, and models
+  - Phase 3: Background workers (DNS with PQueue, Panel adapters for SSP/SRP, Monitor with Telegram notifications)
+  - Phase 4: Deployment configs (Podman Containerfile, systemd service) and test examples
+
+must:
+  - All modules follow the specified architecture (routes.ts, service.ts, model.ts)
+  - API responses conform to standardized format (success, data, error)
+  - Configuration templates in /templates are user-editable after deployment
+  - DNS operations use PQueue to avoid rate limiting
+  - Panel adapters abstract differences between SSP and SRP APIs
+  - Telegram notifications for host offline, low disk, DNS failures
+  - Deployment via Podman (preferred) or systemd

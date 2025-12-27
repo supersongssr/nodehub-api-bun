@@ -12,10 +12,12 @@
     "type-check": "tsc --noEmit",
     "lint": "eslint src/",
     "format": "prettier --write .",
+    "db:init": "bun scripts/init-db.ts",
     "db:generate": "drizzle-kit generate",
-    "db:push": "drizzle-kit push",
-    "db:migrate": "drizzle-kit migrate",
-    "db:studio": "drizzle-kit studio"
+    "db:migrate": "bun scripts/migrate-db.ts",
+    "db:push": "bun run db:generate && bun run db:migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:reset": "rm -f data/nodehub.db && bun run db:migrate"
   },
   "keywords": [
     "node-management",
@@ -30,16 +32,14 @@
   "dependencies": {
     "@elysiajs/swagger": "^1.0.5",
     "elysia": "^1.0.27",
-    "drizzle-orm": "^0.29.4",
+    "drizzle-orm": "^0.36.0",
     "p-queue": "^8.0.1",
-    "better-sqlite3": "^9.2.2",
     "toml": "^0.2.0",
     "axios": "^1.6.5"
   },
   "devDependencies": {
     "@types/bun": "^1.0.0",
-    "@types/better-sqlite3": "^7.6.8",
-    "drizzle-kit": "^0.20.14",
+    "drizzle-kit": "^0.31.0",
     "typescript": "^5.3.3",
     "eslint": "^8.56.0",
     "prettier": "^3.1.1"

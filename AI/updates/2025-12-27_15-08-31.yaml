@@ -1,0 +1,37 @@
+when: "2025-12-27T15:08:31+08:00"
+where:
+  - config/.env.example
+  - config/.env
+  - src/modules/dns/config.ts
+  - src/modules/dns/providers/index.ts
+  - src/modules/dns/service.ts
+
+why: |
+  DNS API 配置描述不清，`DNS_API_KEY` 和 `DNS_API_SECRET` 对 Cloudflare token 来说不够清晰，
+  且难以支持未来多个 DNS 服务商的扩展。
+
+how: |
+  1. 重构 .env.example，将 DNS 配置改为按服务商分组：
+     - Cloudflare: CLOUDFLARE_API_TOKEN (必需), CLOUDFLARE_ZONE_ID (可选)
+     - GoDaddy: GODADDY_API_KEY, GODADDY_API_SECRET (预留)
+     - Namecheap: NAMECHEAP_API_KEY, NAMECHEAP_USERNAME (预留)
+
+  2. 创建 src/modules/dns/config.ts 配置加载模块：
+     - getDnsConfig(): 从环境变量自动加载对应服务商配置
+     - validateDnsConfig(): 验证配置完整性
+     - 支持多服务商，提供清晰的错误提示
+
+  3. 更新 DNS provider 工厂 (src/modules/dns/providers/index.ts)：
+     - 添加配置验证逻辑
+     - 为未实现的服务商提供明确错误提示
+     - 保持向后兼容
+
+  4. 在 DNS service 中导出配置函数，方便外部调用
+
+must:
+  - ✓ Cloudflare token 配置清晰，用户知道从哪里获取 token
+  - ✓ 支持多 DNS 服务商，配置按服务商分组
+  - ✓ 配置验证函数确保必需参数存在
+  - ✓ 向后兼容，不影响现有代码
+  - ✓ 类型检查通过，无 DNS 相关类型错误
+  - ✓ 测试验证配置加载功能正常

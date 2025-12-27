@@ -156,7 +156,7 @@ Validation:
 
 *Documentation & Archiving*:
 测试通过后, 立即更新 *AI* 文件夹中对应的 模块、API的 *.yaml* 定义,确保*代码即配置*.
-11. 在 AI/updates/ 目录下, 按照 <YYYY-MM-DD_HH-mm>.yaml 生成变更日志,格式如下:
+11. 在 AI/updates/ 目录下, 按照 CST时间 <YYYY-MM-DD_HH-mm-ss>.yaml 生成变更日志,格式如下:
 ```yaml
 when: 2000-01-01T11:22:30 # ISO 8601 时间格式
 where: 
